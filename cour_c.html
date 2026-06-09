@@ -531,19 +531,15 @@
                 </div>
 
                 <div class="cmd-simulation-wrapper">
-    <div class="cmd-sim-terminal" id="cmd-sim-logs">...</div>
-    
-    <div class="cmd-sim-input-row">
-        <span id="cmd-current-path-label">C:\Users\Admin></span>
-        <input type="text" id="cmd-sim-field" placeholder="Ex: dir, md dossier, cd .." onkeydown="if(event.key==='Enter') executeCmdSim()">
-    </div>
-    
-    <button class="btn-action" style="background:#22c55e; padding: 8px; margin-top:5px;" onclick="executeCmdSim()">Exécuter la commande (Entrer ↵)</button>
-</div>
-
-<div class="accent-info-text" style="font-size:0.75rem; padding:6px; margin-bottom:10px;">Simulateur de touches physiques :</div>
-<div class="cmd-shortcut-trigger-bar" style="margin-bottom:15px;">
-    </div>
+                    <div class="cmd-sim-terminal" id="cmd-sim-logs">Microsoft Windows [Version 10.0.19045]<br>(c) Microsoft Corporation. Tous droits réservés.</div>
+                    
+                    <div class="cmd-sim-input-row">
+                        <span id="cmd-current-path-label">C:\Users\Admin></span>
+                        <input type="text" id="cmd-sim-field" placeholder="Ex: dir, md dossier, cd .." onkeydown="if(event.key==='Enter') executeCmdSim()">
+                    </div>
+                    
+                    <button class="btn-action" style="background:#22c55e; padding: 8px; margin-top:5px;" onclick="executeCmdSim()">Exécuter la commande (Entrer ↵)</button>
+                </div>
                 <button class="btn-action" style="margin-bottom: 15px; background: #0f172a; border: 1px solid #334155;" onclick="toggleCmdLexiconPanel()">📚 Afficher / Masquer le Lexique des Commandes</button>
             </div>
 
@@ -702,12 +698,15 @@
         { name: "cd dossier", desc: "Entrer dans un sous-dossier spécifié.", syntaxe: "Navigation" },
         { name: "cd..", desc: "Revenir au dossier parent supérieur.", syntaxe: "Retour" },
         { name: "md dossier", desc: "Créer un nouveau répertoire.", syntaxe: "Création" },
+        { name: "rd dossier", desc: "Supprimer un répertoire.", syntaxe: "Suppression" },
+        { name: "del fichier", desc: "Supprimer un fichier.", syntaxe: "Suppression" },
+        { name: "ren old new", desc: "Renommer un fichier ou dossier.", syntaxe: "Renommer" },
+        { name: "copy src dest", desc: "Copier un fichier ou dossier.", syntaxe: "Copie" },
+        { name: "move src dest", desc: "Déplacer/Couper un fichier ou dossier.", syntaxe: "Déplacement" },
         { name: "type nul > f.txt", desc: "Créer un fichier texte .txt vide.", syntaxe: "Fichier TXT" },
         { name: "dir", desc: "Lister les éléments du dossier actuel.", syntaxe: "Affichage" },
         { name: "cls", desc: "Effacer l'intégralité du terminal.", syntaxe: "Nettoyage" },
-        { name: "start .", desc: "Ouvrir l'emplacement dans l'explorateur graphique.", syntaxe: "Interface" },
-        { name: "help", desc: "Afficher le guide des commandes.", syntaxe: "Aide" },
-        { name: "exit", desc: "Quitter le terminal d'invite.", syntaxe: "Fermer" }
+        { name: "start .", desc: "Ouvrir l'emplacement dans l'explorateur graphique.", syntaxe: "Interface" }
     ];
 
     const guideCodes = {
@@ -947,15 +946,41 @@
         } else if(val === 'cls') {
             logs.innerHTML = 'Microsoft Windows [Version 10.0.19045]<br>(c) Microsoft Corporation. Tous droits réservés.';
         } else if(val === 'help') {
-            logs.innerHTML += `<br>Commandes dispo : help, dir, cls, md, cd, cd.., type nul > fichier.txt, start ., exit`;
+            logs.innerHTML += `<br>Commandes : dir, cls, md, rd, cd, cd.., type nul > f.txt, del, ren, copy, move, exit`;
+        } else if(val.startsWith('ren ')) {
+            let parts = rawVal.split(' ');
+            if(parts.length === 3 && currentNode && currentNode.content) {
+                let oldName = parts[1], newName = parts[2];
+                if(currentNode.content[oldName]) {
+                    currentNode.content[newName] = currentNode.content[oldName];
+                    delete currentNode.content[oldName];
+                    logs.innerHTML += `<br>Renommé : "${oldName}" en "${newName}".`;
+                } else { logs.innerHTML += `<br>Erreur : introuvable.`; }
+            }
+        } else if(val.startsWith('copy ')) {
+            let parts = rawVal.split(' ');
+            if(parts.length === 3 && currentNode && currentNode.content) {
+                let src = parts[1], dest = parts[2];
+                if(currentNode.content[src]) {
+                    currentNode.content[dest] = JSON.parse(JSON.stringify(currentNode.content[src]));
+                    logs.innerHTML += `<br>Copié vers "${dest}".`;
+                } else { logs.innerHTML += `<br>Erreur : introuvable.`; }
+            }
+        } else if(val.startsWith('move ')) {
+            let parts = rawVal.split(' ');
+            if(parts.length === 3 && currentNode && currentNode.content) {
+                let src = parts[1], dest = parts[2];
+                if(currentNode.content[src]) {
+                    currentNode.content[dest] = currentNode.content[src];
+                    delete currentNode.content[src];
+                    logs.innerHTML += `<br>Déplacé vers "${dest}".`;
+                } else { logs.innerHTML += `<br>Erreur : introuvable.`; }
+            }
         } else if(val === 'cd..') {
-            if(currentPath === "C:") {
-                logs.innerHTML += `<br>Déjà à la racine du disque C:.`;
-            } else {
+            if(currentPath !== "C:") {
                 let parts = currentPath.split('\\');
                 parts.pop();
                 currentPath = parts.join('\\');
-                if(currentPath === "C:") currentPath = "C:"; 
             }
         } else if(val.startsWith('cd ')) {
             let targetDir = rawVal.substring(3).trim();
@@ -976,12 +1001,22 @@
             }
         } else if(val.startsWith('md ')) {
             let newDirName = rawVal.substring(3).trim();
-            if(!newDirName) {
-                logs.innerHTML += `<br>Syntaxe de commande incorrecte.`;
-            } else if(currentNode && currentNode.content) {
+            if(newDirName && currentNode && currentNode.content) {
                 currentNode.content[newDirName] = { type: "dir", content: {} };
-                logs.innerHTML += `<br>Dossier "${newDirName}" créé avec succès.`;
+                logs.innerHTML += `<br>Dossier "${newDirName}" créé.`;
             }
+        } else if(val.startsWith('rd ')) {
+            let target = rawVal.substring(3).trim();
+            if(currentNode.content[target] && currentNode.content[target].type === 'dir') {
+                delete currentNode.content[target];
+                logs.innerHTML += `<br>Dossier "${target}" supprimé.`;
+            } else { logs.innerHTML += `<br>Dossier introuvable.`; }
+        } else if(val.startsWith('del ')) {
+            let target = rawVal.substring(4).trim();
+            if(currentNode.content[target] && currentNode.content[target].type === 'file') {
+                delete currentNode.content[target];
+                logs.innerHTML += `<br>Fichier "${target}" supprimé.`;
+            } else { logs.innerHTML += `<br>Fichier introuvable.`; }
         } else if(val.startsWith('type nul >')) {
             let filePart = rawVal.split('>')[1].trim();
             if(filePart.endsWith('.txt')) {
@@ -990,17 +1025,17 @@
                     logs.innerHTML += `<br>Fichier texte "${filePart}" créé.`;
                 }
             } else {
-                logs.innerHTML += `<br>Erreur : Seuls les fichiers .txt sont gérés dans cette simulation.`;
+                logs.innerHTML += `<br>Erreur : Seuls les fichiers .txt sont gérés.`;
             }
         } else if(val === 'start .') {
             document.getElementById('fictive-window-explorer').classList.remove('hidden');
-            renderVirtualExplorer();
         } else if(val === 'exit') {
             toggleCmdSimulatorPanel();
         } else {
-            logs.innerHTML += `<br>'${rawVal}' n'est pas reconnu comme commande interne ou externe.`;
+            logs.innerHTML += `<br>'${rawVal}' n'est pas reconnu comme commande.`;
         }
 
+        renderVirtualExplorer();
         inputField.value = '';
         updateCmdPathLabel();
         logs.scrollTop = logs.scrollHeight;
@@ -1028,19 +1063,6 @@
         const win = document.getElementById('fictive-window-explorer');
         if(action === 'minimize') win.classList.toggle('minimized');
         if(action === 'maximize') win.classList.toggle('maximized');
-    }
-
-    function triggerVirtualShortcut(action) {
-        const logs = document.getElementById('cmd-sim-logs');
-        if(action === 'CTRL_E') {
-            logs.innerHTML += `<br><span style="color:#f59e0b;">[Système] Touche CTRL+E : Ouverture de l'explorateur graphique...</span>`;
-            document.getElementById('fictive-window-explorer').classList.remove('hidden');
-            renderVirtualExplorer();
-        } else if(action === 'ALT_F4') {
-            logs.innerHTML += `<br><span style="color:#ef4444;">[Système] Touche ALT+F4 : Fermeture forcée de la fenêtre.</span>`;
-            closeVirtualWindow();
-        }
-        logs.scrollTop = logs.scrollHeight;
     }
 
     function closeVirtualWindow() { document.getElementById('fictive-window-explorer').classList.add('hidden'); }
