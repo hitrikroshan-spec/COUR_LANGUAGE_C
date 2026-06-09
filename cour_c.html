@@ -316,7 +316,7 @@
             line-height: 1.4;
         }
 
-        /* SIMULATEUR CMD ÉLARGIT JUSQU'AU TASKBAR */
+        /* SIMULATEUR CMD */
         .cmd-simulation-wrapper {
             background: #000000;
             border: 2px solid #334155;
@@ -517,8 +517,6 @@
         <div id="view-cmd" class="hidden" style="display:flex; flex-direction:column; height:100%;">
             <button class="btn-action" style="margin-bottom: 10px; background: #1e3a8a; border: 1px solid #3b82f6;" onclick="toggleCmdSimulatorPanel()">🖥️ Ouvrir / Fermer le Simulateur Invite CMD</button>
             
-            <button class="btn-action" style="margin-bottom: 15px; background: #0f172a; border: 1px solid #334155;" onclick="toggleCmdLexiconPanel()">📚 Afficher / Masquer le Lexique des Commandes</button>
-            
             <div id="cmd-simulator-zone" class="hidden" style="display:flex; flex-direction:column; flex:1;">
                 <div id="fictive-window-explorer" class="virtual-window-gui hidden">
                     <div class="win-gui-header">
@@ -533,19 +531,20 @@
                 </div>
 
                 <div class="cmd-simulation-wrapper">
-                    <div class="cmd-sim-terminal" id="cmd-sim-logs">Microsoft Windows [Version 10.0.19045]<br>(c) Microsoft Corporation. Tous droits réservés.<br><br>Tapez 'help' pour voir les commandes.</div>
-                    <div class="cmd-sim-input-row">
-                        <span id="cmd-current-path-label">C:\Users\Admin></span>
-                        <input type="text" id="cmd-sim-field" placeholder="Ex: dir, md dossier, cd .." onkeydown="if(event.key==='Enter') executeCmdSim()">
-                        <button class="btn-shortcut-sim" onclick="executeCmdSim()" style="padding: 4px 8px; margin-left:5px;">Entrer ↵</button>
-                    </div>
-                </div>
+    <div class="cmd-sim-terminal" id="cmd-sim-logs">...</div>
+    
+    <div class="cmd-sim-input-row">
+        <span id="cmd-current-path-label">C:\Users\Admin></span>
+        <input type="text" id="cmd-sim-field" placeholder="Ex: dir, md dossier, cd .." onkeydown="if(event.key==='Enter') executeCmdSim()">
+    </div>
+    
+    <button class="btn-action" style="background:#22c55e; padding: 8px; margin-top:5px;" onclick="executeCmdSim()">Exécuter la commande (Entrer ↵)</button>
+</div>
 
-                <div class="accent-info-text" style="font-size:0.75rem; padding:6px; margin-bottom:10px;">Simulateur de touches physiques :</div>
-                <div class="cmd-shortcut-trigger-bar" style="margin-bottom:15px;">
-                    <button class="btn-shortcut-sim" onclick="triggerVirtualShortcut('CTRL_E')">🗂️ Action : CTRL + E (Ouvrir)</button>
-                    <button class="btn-shortcut-sim" onclick="triggerVirtualShortcut('ALT_F4')" style="color:#ef4444;">❌ Action : ALT + F4 (Fermer)</button>
-                </div>
+<div class="accent-info-text" style="font-size:0.75rem; padding:6px; margin-bottom:10px;">Simulateur de touches physiques :</div>
+<div class="cmd-shortcut-trigger-bar" style="margin-bottom:15px;">
+    </div>
+                <button class="btn-action" style="margin-bottom: 15px; background: #0f172a; border: 1px solid #334155;" onclick="toggleCmdLexiconPanel()">📚 Afficher / Masquer le Lexique des Commandes</button>
             </div>
 
             <div id="cmd-lexicon-zone">
