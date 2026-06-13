@@ -931,7 +931,81 @@
             padding: 0;
         }
 
-        /* Scrollbar styling for the terminal aesthetic */
+        /* ===== FENÊTRE CONSOLE GCC ===== */
+        .gcc-console-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(5,7,11,0.82); backdrop-filter: blur(3px);
+            z-index: 300; display: flex; align-items: center; justify-content: center;
+        }
+        .gcc-console-window {
+            background: #0a0d14; border: 1.5px solid #2dd4bf;
+            border-radius: 12px; width: 92%; max-width: 380px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(94,234,212,0.08);
+            display: flex; flex-direction: column; max-height: 80vh; overflow: hidden;
+        }
+        .theme-fille .gcc-console-window { background:#fff8fb; border-color:#f9a8d4; }
+        .theme-garcon .gcc-console-window { background:#f8fbff; border-color:#93c5fd; }
+        .gcc-console-header {
+            background: #161b26; padding: 8px 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #283041; flex-shrink: 0;
+        }
+        .theme-fille .gcc-console-header { background:#ffe4f0; border-color:#f9a8d4; }
+        .theme-garcon .gcc-console-header { background:#dbeafe; border-color:#93c5fd; }
+        .gcc-console-title { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: #5eead4; }
+        .theme-fille .gcc-console-title { color:#e8197d; }
+        .theme-garcon .gcc-console-title { color:#1d4ed8; }
+        .gcc-console-close { background:#ef4444; color:#fff; border:none; border-radius:5px; width:22px; height:22px; font-size:0.8rem; font-weight:900; cursor:pointer; }
+        .gcc-console-body {
+            padding: 12px; flex: 1; overflow-y: auto; font-family: var(--mono);
+            font-size: 0.78rem; color: #5eead4; background: #04060a;
+            white-space: pre-wrap; min-height: 120px; max-height: 45vh;
+        }
+        .theme-fille .gcc-console-body { background:#fff0f6; color:#5b1038; }
+        .theme-garcon .gcc-console-body { background:#f0f6ff; color:#1e3a5f; }
+        .gcc-run-btn {
+            margin: 10px 12px 12px; padding: 9px; border-radius: 8px; border: none;
+            background: #22c55e; color: #052e16; font-family: var(--mono); font-size: 0.82rem;
+            font-weight: 800; cursor: pointer; transition: filter 0.15s;
+        }
+        .gcc-run-btn:hover { filter: brightness(1.12); }
+
+        /* ===== GESTIONNAIRE DE PROJETS ÉDITEUR ===== */
+        .proj-manager {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; margin-bottom: 8px; overflow: hidden; flex-shrink: 0;
+        }
+        .proj-manager-header {
+            background: var(--surface-2); padding: 7px 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+        .proj-manager-title { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; color: var(--primary); }
+        .proj-file-list { padding: 6px 8px; max-height: 110px; overflow-y: auto; }
+        .proj-file-item {
+            display: flex; align-items: center; gap: 6px; padding: 4px 8px;
+            border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.75rem;
+            color: var(--text); transition: background 0.12s; border: 1px solid transparent;
+        }
+        .proj-file-item:hover { background: var(--surface-2); }
+        .proj-file-item.active-file { background: var(--surface-2); border-color: var(--primary); color: var(--primary); font-weight: 700; }
+        .proj-file-item .pf-del { margin-left:auto; color: var(--danger); font-size: 0.7rem; opacity:0.6; }
+        .proj-file-item .pf-del:hover { opacity:1; }
+        .btn-proj-new { background: var(--surface); border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; padding: 3px 9px; font-size: 0.7rem; font-family: var(--mono); font-weight: 700; cursor: pointer; }
+        .btn-proj-save-fs { background: var(--primary); border: none; color: var(--bg); border-radius: 6px; padding: 3px 9px; font-size: 0.7rem; font-family: var(--mono); font-weight: 700; cursor: pointer; }
+        .proj-empty { color: var(--text-dim); font-size: 0.72rem; padding: 6px 8px; font-style: italic; }
+        .proj-selector { margin-bottom: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .btn-proj-switch { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); border-radius: 14px; padding: 3px 10px; font-size: 0.68rem; font-family: var(--mono); cursor: pointer; }
+        .btn-proj-switch.active { border-color: var(--primary); color: var(--primary); background: var(--surface); }
+
+        /* Scrollbar du gestionnaire */
+        .proj-file-list::-webkit-scrollbar { width: 4px; }
+        .proj-file-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        /* Ajout du CSS scrollbar pour gcc-console-body */
+        .gcc-console-body::-webkit-scrollbar { width: 5px; }
+        .gcc-console-body::-webkit-scrollbar-thumb { background: #283041; border-radius: 3px; }
+
         .content::-webkit-scrollbar, .terminal-box::-webkit-scrollbar, .cmd-sim-terminal::-webkit-scrollbar,
         .win-gui-body::-webkit-scrollbar, .txt-viewer-body::-webkit-scrollbar { width: 6px; }
         .content::-webkit-scrollbar-thumb, .terminal-box::-webkit-scrollbar-thumb, .cmd-sim-terminal::-webkit-scrollbar-thumb,
@@ -1086,9 +1160,23 @@
 
         <div id="view-editor" class="hidden" style="display:flex; flex-direction:column; flex:1; height:100%;">
             <div class="cb-action-bar">
-                <button class="btn-cb active" id="cb-mode-edit" onclick="setCbViewMode('edit')">📝 Éditeur seul</button>
+                <button class="btn-cb active" id="cb-mode-edit" onclick="setCbViewMode('edit')">📝 Éditeur</button>
                 <button class="btn-cb btn-cb-build" id="cb-mode-build" onclick="setCbViewMode('build')">⚙️ Build & Run</button>
-                <button class="btn-cb" id="cb-mode-save" onclick="setCbViewMode('save')">📁 Sauvegardes</button>
+                <button class="btn-cb" id="cb-mode-save" onclick="setCbViewMode('save')">📁 Projets</button>
+            </div>
+
+            <!-- GESTIONNAIRE DE PROJETS -->
+            <div class="proj-manager" id="proj-manager-box">
+                <div class="proj-manager-header">
+                    <span class="proj-manager-title" id="proj-name-label">📂 Projet : —</span>
+                    <div style="display:flex;gap:5px;">
+                        <button class="btn-proj-new" onclick="newProjectFile()">+ Fichier</button>
+                        <button class="btn-proj-save-fs" onclick="saveCurrentFileToFS()">💾 FS</button>
+                    </div>
+                </div>
+                <div class="proj-file-list" id="proj-file-list">
+                    <div class="proj-empty">Aucun fichier ouvert. Utilisez "Projets" → Nouveau.</div>
+                </div>
             </div>
 
             <div class="word-editor-container" id="ide-box-panel">
@@ -1098,7 +1186,7 @@
                     </div>
                     <div class="editor-wrapper">
                         <div class="editor-backdrop" id="editor-highlight-box"></div>
-                        <textarea id="c-editor" class="editor-textarea" spellcheck="false" placeholder="// Tapez votre code C..." oninput="updateIdeView()" onscroll="syncIdeScroll()"></textarea>
+                        <textarea id="c-editor" class="editor-textarea" spellcheck="false" placeholder="// Tapez votre code C ou .h ici..." oninput="updateIdeView(); autoSaveCurrentFile()" onscroll="syncIdeScroll()"></textarea>
                     </div>
                 </div>
             </div>
@@ -1112,8 +1200,14 @@
                 <div id="local-terminal" class="terminal-box" style="flex: 1; height: auto;"></div>
             </div>
 
-            <div id="saved-scripts-panel" class="hidden" style="margin-top:10px; overflow-y:auto; max-height:220px;">
-                <button class="btn-action" style="background:#5eead4; padding: 10px; margin-bottom: 10px;" onclick="saveEditorText()">💾 Sauvegarder le fichier actuel</button>
+            <!-- PANNEAU PROJETS & SAUVEGARDES -->
+            <div id="saved-scripts-panel" class="hidden" style="margin-top:6px; overflow-y:auto; max-height:300px;">
+                <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
+                    <button class="btn-action" style="flex:1;padding:8px;margin-bottom:0;font-size:0.78rem;" onclick="createNewProject()">➕ Nouveau Projet</button>
+                    <button class="btn-action" style="flex:1;padding:8px;margin-bottom:0;font-size:0.78rem;background:var(--surface-2);color:var(--primary);" onclick="saveEditorText()">💾 Sauvegarder</button>
+                </div>
+                <!-- Sélecteur de projets -->
+                <div class="proj-selector" id="proj-selector-list"></div>
                 <div id="editor-local-saved-container"></div>
             </div>
         </div>
@@ -1148,6 +1242,18 @@
             </div>
             <div class="txt-viewer-body" id="txt-viewer-body">(fichier vide)</div>
             <div class="txt-viewer-footer" id="txt-viewer-footer">Lecture seule — utilisez echo pour écrire</div>
+        </div>
+    </div>
+
+    <!-- FENÊTRE CONSOLE GCC (compilation + exécution du fichier .c) -->
+    <div class="gcc-console-overlay hidden" id="gcc-console-overlay">
+        <div class="gcc-console-window">
+            <div class="gcc-console-header">
+                <span class="gcc-console-title" id="gcc-console-title">🔨 GCC — Compilation & Exécution</span>
+                <button class="gcc-console-close" onclick="closeGccConsole()">✕</button>
+            </div>
+            <div class="gcc-console-body" id="gcc-console-body">En attente...</div>
+            <button class="gcc-run-btn" id="gcc-run-btn" onclick="gccRunExe()" style="display:none;">▶ Exécuter le programme</button>
         </div>
     </div>
 </div>
@@ -1190,7 +1296,8 @@
                                 } },
                                 "Documents": { type: "dir", content: {} },
                                 "Images": { type: "dir", content: {} },
-                                "Videos": { type: "dir", content: {} }
+                                "Videos": { type: "dir", content: {} },
+                                "Sauvegardes": { type: "dir", content: {} }
                             }
                         }
                     }
@@ -1533,7 +1640,6 @@
         let currentNode = getFolderNode(currentPath);
 
         if(cmdName === 'gcc') {
-            // Parser: gcc <fichier.c> -o <sortie.exe>
             let gccArgs = rawVal.substring(3).trim();
             let srcMatch = gccArgs.match(/(\S+\.c)/i);
             let outMatch = gccArgs.match(/-o\s+(\S+)/i);
@@ -1552,14 +1658,13 @@
                     if(!cCode.trim()) {
                         logs.innerHTML += `<br><span style="color:#f87171;">Erreur GCC : le fichier "${srcFile}" est vide.</span>`;
                     } else {
-                        logs.innerHTML += `<br><span style="color:#22c55e;">[GCC] Compilation de "${srcFile}" → "${outFile}"...</span>`;
-                        logs.innerHTML += `<br>Analyse lexicale... OK`;
-                        logs.innerHTML += `<br>Génération du code... OK`;
-                        logs.innerHTML += `<br><span style="color:#5eead4;">Exécutable "${outFile}" créé avec succès.</span>`;
-                        // Stocker le code compilé associé à l'exe dans le fileSystem
+                        // Stocker l'exe
                         if(node && node.content) {
                             node.content[outFile] = { type: 'exe', content: cCode, src: srcFile };
                         }
+                        logs.innerHTML += `<br><span style="color:#22c55e;">[GCC] Compilation de "${srcFile}" → "${outFile}" OK</span>`;
+                        // Ouvrir la fenêtre console GCC
+                        openGccConsole(srcFile, outFile, cCode);
                     }
                 }
             }
@@ -1843,6 +1948,251 @@
         document.getElementById('txt-viewer-overlay').classList.add('hidden');
     }
 
+    // =========================================================
+    // FENÊTRE CONSOLE GCC (compilation + exécution)
+    // =========================================================
+    let _gccCompiledCode = '';
+    let _gccExeName = '';
+
+    function openGccConsole(srcFile, outFile, cCode) {
+        _gccCompiledCode = cCode;
+        _gccExeName = outFile;
+        const overlay = document.getElementById('gcc-console-overlay');
+        const body = document.getElementById('gcc-console-body');
+        const runBtn = document.getElementById('gcc-run-btn');
+        document.getElementById('gcc-console-title').innerText = `🔨 GCC — ${srcFile} → ${outFile}`;
+        body.innerHTML = '';
+        body.innerHTML += `<span style="color:#22c55e;">gcc ${srcFile} -o ${outFile}</span>\n`;
+        body.innerHTML += `Analyse lexicale...         OK\n`;
+        body.innerHTML += `Analyse syntaxique...       OK\n`;
+        body.innerHTML += `Génération du code objet... OK\n`;
+        body.innerHTML += `Édition des liens...        OK\n`;
+        body.innerHTML += `<span style="color:#5eead4;">✔ Exécutable "${outFile}" créé avec succès.\n</span>`;
+        body.innerHTML += `\nAppuyez sur ▶ Exécuter pour lancer le programme.`;
+        runBtn.style.display = 'block';
+        overlay.classList.remove('hidden');
+    }
+
+    async function gccRunExe() {
+        const body = document.getElementById('gcc-console-body');
+        const runBtn = document.getElementById('gcc-run-btn');
+        runBtn.style.display = 'none';
+        body.innerHTML += `\n\n--- Exécution de ${_gccExeName} ---\n`;
+        try {
+            let result = '';
+            if(window.__TCC_READY && window.__TCC_MODULE) {
+                result = await compileAndRunWasm(_gccCompiledCode);
+            } else {
+                result = runCInterpreterLocal(_gccCompiledCode);
+            }
+            body.innerHTML += result.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+        } catch(err) {
+            body.innerHTML += `<span style="color:#f87171;">Erreur : ${err.message}</span>`;
+        }
+        body.innerHTML += `\n\nProcess returned 0 (0x0)  execution time : 0.042 s\nAppuyez sur une touche pour continuer...`;
+        body.scrollTop = body.scrollHeight;
+        runBtn.textContent = '↩ Fermer';
+        runBtn.style.display = 'block';
+        runBtn.onclick = closeGccConsole;
+    }
+
+    function closeGccConsole() {
+        document.getElementById('gcc-console-overlay').classList.add('hidden');
+        document.getElementById('gcc-run-btn').onclick = gccRunExe;
+        document.getElementById('gcc-run-btn').textContent = '▶ Exécuter le programme';
+    }
+
+    // =========================================================
+    // GESTIONNAIRE DE PROJETS (Éditeur)
+    // =========================================================
+    let projects = {}; // { projName: { files: { 'main.c': code, 'utils.h': code } } }
+    let activeProject = null;
+    let activeFile = null;
+
+    function getProjects() {
+        try {
+            let raw = localStorage.getItem('univ_projects');
+            return raw ? JSON.parse(raw) : {};
+        } catch(e) { return {}; }
+    }
+
+    function saveProjects() {
+        localStorage.setItem('univ_projects', JSON.stringify(projects));
+    }
+
+    function loadProjectsFromStorage() {
+        projects = getProjects();
+        // Si aucun projet, créer un projet par défaut
+        if(Object.keys(projects).length === 0) {
+            projects['MonProjet'] = { files: { 'main.c': '#include <stdio.h>\n\nint main() {\n    printf("Bonjour depuis MonProjet !\\n");\n    return 0;\n}' } };
+            saveProjects();
+        }
+        activeProject = Object.keys(projects)[0];
+        activeFile = Object.keys(projects[activeProject].files)[0];
+    }
+
+    function renderProjManager() {
+        // Sélecteur projets dans panneau "Projets"
+        const selList = document.getElementById('proj-selector-list');
+        if(selList) {
+            selList.innerHTML = Object.keys(projects).map(p =>
+                `<button class="btn-proj-switch ${p===activeProject?'active':''}" onclick="switchProject('${p}')">${p}</button>`
+            ).join('');
+        }
+        // Header du gestionnaire
+        document.getElementById('proj-name-label').innerText = `📂 Projet : ${activeProject || '—'}`;
+        // Liste des fichiers
+        const list = document.getElementById('proj-file-list');
+        if(!activeProject || !projects[activeProject]) {
+            list.innerHTML = '<div class="proj-empty">Aucun projet actif.</div>';
+            return;
+        }
+        const files = projects[activeProject].files;
+        if(!files || Object.keys(files).length === 0) {
+            list.innerHTML = '<div class="proj-empty">Aucun fichier. Cliquez + Fichier.</div>';
+            return;
+        }
+        list.innerHTML = Object.keys(files).map(fname => {
+            let icon = fname.endsWith('.h') ? '📋' : fname.endsWith('.c') ? '⚙️' : '📄';
+            return `<div class="proj-file-item ${fname===activeFile?'active-file':''}" onclick="openProjectFile('${fname}')">
+                ${icon} <span>${fname}</span>
+                <span class="pf-del" onclick="event.stopPropagation();deleteProjectFile('${fname}')">✕</span>
+            </div>`;
+        }).join('');
+        // Sauvegardes dans le panneau
+        renderSavedScriptsList();
+    }
+
+    function switchProject(projName) {
+        if(activeProject && activeFile && projects[activeProject]) {
+            projects[activeProject].files[activeFile] = document.getElementById('c-editor').value;
+        }
+        activeProject = projName;
+        let files = projects[activeProject].files;
+        activeFile = Object.keys(files)[0] || null;
+        if(activeFile) {
+            document.getElementById('c-editor').value = files[activeFile];
+        } else {
+            document.getElementById('c-editor').value = '';
+        }
+        updateIdeView();
+        renderProjManager();
+        saveProjects();
+    }
+
+    function openProjectFile(fname) {
+        if(activeProject && activeFile) {
+            projects[activeProject].files[activeFile] = document.getElementById('c-editor').value;
+        }
+        activeFile = fname;
+        document.getElementById('c-editor').value = projects[activeProject].files[fname] || '';
+        updateIdeView();
+        renderProjManager();
+        saveProjects();
+    }
+
+    function autoSaveCurrentFile() {
+        if(activeProject && activeFile && projects[activeProject]) {
+            projects[activeProject].files[activeFile] = document.getElementById('c-editor').value;
+            saveProjects();
+        }
+    }
+
+    function newProjectFile() {
+        if(!activeProject) { createNewProject(); return; }
+        let ext = prompt('Extension du fichier (.c ou .h) :', '.c');
+        if(!ext) return;
+        ext = ext.startsWith('.') ? ext : '.' + ext;
+        if(ext !== '.c' && ext !== '.h') { alert('Seuls .c et .h sont supportés.'); return; }
+        let baseName = prompt('Nom du fichier (sans extension) :', ext === '.h' ? 'prototype' : 'nouveau');
+        if(!baseName) return;
+        let fname = baseName.replace(/[^a-zA-Z0-9_]/g,'') + ext;
+        if(projects[activeProject].files[fname]) { alert('Ce fichier existe déjà.'); return; }
+        let template = ext === '.h'
+            ? `#ifndef ${baseName.toUpperCase()}_H\n#define ${baseName.toUpperCase()}_H\n\n// Prototypes de fonctions\nvoid maFonction(int a, int b);\n\n#endif`
+            : `#include <stdio.h>\n#include "${baseName}.h"\n\nint main() {\n    printf("Fichier ${fname}\\n");\n    return 0;\n}`;
+        projects[activeProject].files[fname] = template;
+        autoSaveCurrentFile();
+        activeFile = fname;
+        document.getElementById('c-editor').value = template;
+        updateIdeView();
+        renderProjManager();
+        saveProjects();
+    }
+
+    function deleteProjectFile(fname) {
+        if(!confirm(`Supprimer "${fname}" du projet ?`)) return;
+        delete projects[activeProject].files[fname];
+        if(activeFile === fname) {
+            let remaining = Object.keys(projects[activeProject].files);
+            activeFile = remaining[0] || null;
+            document.getElementById('c-editor').value = activeFile ? projects[activeProject].files[activeFile] : '';
+            updateIdeView();
+        }
+        renderProjManager();
+        saveProjects();
+    }
+
+    function createNewProject() {
+        let pName = prompt('Nom du nouveau projet :');
+        if(!pName || !pName.trim()) return;
+        pName = pName.trim();
+        if(projects[pName]) { alert('Un projet avec ce nom existe déjà.'); return; }
+        projects[pName] = { files: { 'main.c': '#include <stdio.h>\n\nint main() {\n    printf("Bonjour depuis ' + pName + ' !\\n");\n    return 0;\n}' } };
+        saveProjects();
+        switchProject(pName);
+        setCbViewMode('edit');
+    }
+
+    function saveCurrentFileToFS() {
+        // Sauvegarde le fichier .c ou .h actif dans le dossier Sauvegardes du fileSystem CMD
+        if(!activeProject || !activeFile) { alert('Aucun fichier actif.'); return; }
+        let code = document.getElementById('c-editor').value;
+        let savePath = 'C:\\Users\\Admin\\Sauvegardes';
+        let node = getFolderNode(savePath);
+        if(!node) { alert('Dossier Sauvegardes introuvable dans le simulateur.'); return; }
+        node.content[activeFile] = { type: 'file', content: code };
+        alert(`✅ "${activeFile}" sauvegardé dans C:\\Users\\Admin\\Sauvegardes`);
+    }
+
+    function renderSavedScriptsList() {
+        const container = document.getElementById('editor-local-saved-container');
+        if(!container) return;
+        if(!projects || Object.keys(projects).length === 0) {
+            container.innerHTML = '<p style="color:var(--text-dim);font-size:0.8rem;margin:6px 0;">Aucun projet enregistré.</p>';
+            return;
+        }
+        container.innerHTML = Object.keys(projects).map(pName => {
+            let proj = projects[pName];
+            let files = Object.keys(proj.files || {});
+            return `<div class="note-paper" style="margin-bottom:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                    <b style="color:var(--primary);font-size:0.82rem;">📂 ${pName}</b>
+                    <button class="btn-note-opt btn-trash" onclick="deleteProject('${pName}')">🗑</button>
+                </div>
+                <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:6px;">${files.length} fichier(s) : ${files.join(', ')}</div>
+                <button class="btn-note-opt btn-load" onclick="switchProject('${pName}');setCbViewMode('edit')">Ouvrir</button>
+            </div>`;
+        }).join('');
+    }
+
+    function deleteProject(pName) {
+        if(!confirm(`Supprimer le projet "${pName}" ?`)) return;
+        delete projects[pName];
+        if(activeProject === pName) {
+            let remaining = Object.keys(projects);
+            if(remaining.length > 0) {
+                switchProject(remaining[0]);
+            } else {
+                activeProject = null; activeFile = null;
+                document.getElementById('c-editor').value = '';
+                updateIdeView();
+            }
+        }
+        saveProjects();
+        renderProjManager();
+    }
+
     function renderVirtualExplorer() {
         let contentZone = document.getElementById('virtual-window-content');
         if(!contentZone) return;
@@ -1962,6 +2312,13 @@
         const terminal = document.getElementById('local-terminal');
         terminal.innerText = "Compilation en cours...\n";
 
+        // Ouvrir aussi la fenêtre console GCC pour l'éditeur
+        let fname = activeFile || 'programme.c';
+        let exeName = fname.replace(/\.(c|h)$/i, '.exe');
+        _gccCompiledCode = code;
+        _gccExeName = exeName;
+        openGccConsole(fname, exeName, code);
+
         if(window.__TCC_READY && window.__TCC_MODULE) {
             try {
                 let result = await compileAndRunWasm(code);
@@ -1972,7 +2329,6 @@
             }
         }
 
-        // Fallback : interpréteur JavaScript intégré
         let resultText = runCInterpreterLocal(code);
         terminal.innerText += resultText + "\n\nProcess returned 0 (0x0) execution time : 0.042 s";
     }
@@ -2334,17 +2690,20 @@
         const ideBox = document.getElementById('ide-box-panel');
         const consoleBox = document.getElementById('console-box-panel');
         const savesBox = document.getElementById('saved-scripts-panel');
+        const projMgr = document.getElementById('proj-manager-box');
         const contentArea = document.getElementById('content-scroller');
 
         if(mode === 'edit') {
             ideBox.classList.remove('hidden');
             consoleBox.classList.add('hidden');
             savesBox.classList.add('hidden');
+            projMgr.classList.remove('hidden');
             contentArea.classList.add('editor-active-mode');
         } else if(mode === 'build') {
             ideBox.classList.remove('hidden');
             consoleBox.classList.remove('hidden');
             savesBox.classList.add('hidden');
+            projMgr.classList.remove('hidden');
             contentArea.classList.remove('editor-active-mode');
             clearTerminalDisplay();
             let codeToRun = document.getElementById('c-editor').value;
@@ -2353,7 +2712,9 @@
             ideBox.classList.add('hidden');
             consoleBox.classList.add('hidden');
             savesBox.classList.remove('hidden');
+            projMgr.classList.add('hidden');
             contentArea.classList.remove('editor-active-mode');
+            renderProjManager();
         }
     }
 
@@ -2367,15 +2728,9 @@
     }
 
     function saveEditorText() {
-        const code = document.getElementById('c-editor').value;
-        if(!code.trim()) { alert("L'éditeur est vide."); return; }
-        const list = getSavedScripts();
-        const dateStr = new Date().toLocaleString('fr-FR');
-        list.push({ date: dateStr, code: code });
-        localStorage.setItem('univ_c_scripts', JSON.stringify(list));
-        alert("Fichier sauvegardé localement !");
-        loadSavedScripts();
-        renderSavedScriptsInDico();
+        autoSaveCurrentFile();
+        alert(`✅ "${activeFile || 'fichier'}" sauvegardé dans le projet "${activeProject || '—'}" !`);
+        renderProjManager();
     }
 
     function loadSavedScripts() {
@@ -2483,6 +2838,14 @@
 
         if(view === 'dico') toggleDicoTab('dict');
         if(view === 'cmd') renderVirtualExplorer();
+        if(view === 'editor') {
+            if(Object.keys(projects).length === 0) loadProjectsFromStorage();
+            renderProjManager();
+            if(activeFile && activeProject) {
+                document.getElementById('c-editor').value = projects[activeProject]?.files[activeFile] || '';
+                updateIdeView();
+            }
+        }
     }
 </script>
 </body>
